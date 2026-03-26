@@ -1,0 +1,31 @@
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: false # use grafana's alertmanager
+
+prometheus:
+  prometheusSpec:
+    retention: 7d
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+
+nodeExporter:
+  enabled: true
+
+
+kube-state-metrics:
+  enabled: true
