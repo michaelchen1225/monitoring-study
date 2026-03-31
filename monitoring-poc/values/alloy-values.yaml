@@ -26,7 +26,7 @@ alloy:
         rule {
           source_labels = ["__meta_kubernetes_namespace"]
           action        = "keep"
-          regex         = "cdp"
+          regex         = "cdp|rabbitmq-system"
         }
       }
 

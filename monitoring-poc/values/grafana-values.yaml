@@ -1,8 +1,6 @@
 adminPassword: "changeme123"
-
 service:
-  type: LoadBalancer
-
+  type: ClusterIP
 datasources:
   datasources.yaml:
     apiVersion: 1
@@ -11,7 +9,12 @@ datasources:
         type: loki
         url: http://loki-gateway.monitoring.svc.cluster.local
         isDefault: true
-
+        uid: loki
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+        isDefault: false
+        uid: prometheus
 resources:
   requests:
     cpu: 100m
@@ -19,7 +22,6 @@ resources:
   limits:
     cpu: 200m
     memory: 256Mi
-
 persistence:
   enabled: true
   size: 2Gi

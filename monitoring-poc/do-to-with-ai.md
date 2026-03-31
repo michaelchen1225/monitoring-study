@@ -4,15 +4,21 @@
 
 ---
 
-**環境：**
-AKS cluster，4 個 node，每個 4 CPU / 16GB RAM，namespace 主要是 `cdp`，服務包含 Airflow、Presto、Hive、MongoDB、MySQL、RabbitMQ 和一系列 `cdp-*-api`。
+環境：
+AKS cluster，4 個 node，每個 4 CPU / 16GB RAM，namespace 主要是 cdp，服務包含 Airflow、Presto、Hive、MongoDB、MySQL、RabbitMQ 和一系列 cdp-*-api。
 
-**已完成的 POC：**
-在 `monitoring` namespace 裝了 Loki + Grafana Alloy + Grafana，全部用 Helm 安裝。Alloy 收集 `cdp` namespace 的 Log 推給 Loki，Grafana 透過 LoadBalancer 對外開放。已建立 `CDP Services - Log Monitor` Dashboard，有 ERROR Log 列表和各 Pod ERROR 趨勢圖。Slack 告警已設定，條件是過去 1 小時 ERROR 數超過閾值就發通知。
+已完成的 POC：
+在 monitoring namespace 裝了 Loki + Grafana Alloy + Grafana，全部用 Helm 安裝。Alloy 收集 cdp namespace 的 Log 推給 Loki，Grafana 透過 port foward 對外開放。已建立 CDP Services - Log Monitor Dashboard，有 ERROR Log 列表和各 Pod ERROR 趨勢圖。Slack 告警已設定，條件是過去 1 小時 ERROR 數超過閾值就發通知。
 
-**工作目錄：** `~/grafana-poc`，裡面有 `loki-values.yaml`、`alloy-values.yaml`、`grafana-values.yaml`。
+工作目錄：~/monitoring-poc，裡面有 values 目錄，存放 loki-values.yaml、alloy-values.yaml、grafana-values.yaml。
 
-**下一步目標：** 安裝 Prometheus，建立 Cluster 層級 Dashboard。
+另外還有一個 dashboard 目錄，裡面有 dashboard-*.json，用來做 grafana dashboard provisioning
+。
+
+下一步目標：安裝 Prometheus，建立 Cluster 層級 Dashboard。
+
+
+目前：已安裝 prometheus，但還沒在 grafana 確認
 
 ---
 

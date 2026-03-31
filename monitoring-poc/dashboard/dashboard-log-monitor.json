@@ -18,20 +18,15 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
       "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
+        "type": "loki"
       },
       "gridPos": {
-        "h": 8,
+        "h": 16,
         "w": 24,
         "x": 0,
         "y": 0
@@ -50,23 +45,21 @@
       "targets": [
         {
           "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "type": "loki"
           },
           "direction": "backward",
           "editorMode": "code",
-          "expr": "{namespace=\"cdp\", pod=~\"$Pod\"} |= \"ERROR\"",
+          "expr": "{namespace=\"$namespace\", pod=~\"$Pod\"} |~ \"(?i)$log_level\"",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "CDP Error Logs",
+      "title": "CDP $log_level Logs",
       "type": "logs"
     },
     {
       "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "type": "loki"
       },
       "fieldConfig": {
         "defaults": {
@@ -128,7 +121,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 2,
       "options": {
@@ -149,13 +142,63 @@
         {
           "direction": "backward",
           "editorMode": "code",
-          "expr": "sum by (pod) (count_over_time({namespace=\"cdp\"} |= \"ERROR\" [5m]))",
+          "expr": "sum by (pod) (count_over_time({namespace=\"$namespace\"} |~ \"(?i)$log_level\" [5m]))",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Error Count by pod",
+      "title": "$log_level logs count by pod",
       "type": "timeseries"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 3,
+      "panels": [
+        {
+          "datasource": {
+            "type": "loki"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 16
+          },
+          "id": 4,
+          "options": {
+            "dedupStrategy": "none",
+            "enableInfiniteScrolling": false,
+            "enableLogDetails": true,
+            "showControls": false,
+            "showTime": false,
+            "sortOrder": "Descending",
+            "wrapLogMessage": false
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki"
+              },
+              "direction": "backward",
+              "editorMode": "code",
+              "expr": "{namespace=\"$namespace\", pod=~\"$Pod\"}",
+              "queryType": "range",
+              "refId": "A"
+            }
+          ],
+          "title": "All logs",
+          "type": "logs"
+        }
+      ],
+      "title": "All logs",
+      "type": "row"
     }
   ],
   "preload": false,
@@ -163,6 +206,29 @@
   "tags": [],
   "templating": {
     "list": [
+      {
+        "current": {
+          "text": "rabbitmq-system",
+          "value": "rabbitmq-system"
+        },
+        "description": "",
+        "label": "namespace",
+        "name": "namespace",
+        "options": [
+          {
+            "selected": false,
+            "text": "cdp",
+            "value": "cdp"
+          },
+          {
+            "selected": true,
+            "text": "rabbitmq-system",
+            "value": "rabbitmq-system"
+          }
+        ],
+        "query": "cdp,rabbitmq-system",
+        "type": "custom"
+      },
       {
         "current": {
           "text": "airflow-redis-0",
@@ -176,12 +242,47 @@
         "query": {
           "label": "pod",
           "refId": "LokiVariableQueryEditor-VariableQuery",
-          "stream": "",
+          "stream": "{namespace=\"$namespace\"}",
           "type": 1
         },
         "refresh": 1,
         "regex": "",
+        "sort": 1,
         "type": "query"
+      },
+      {
+        "current": {
+          "text": "ERROR",
+          "value": "ERROR"
+        },
+        "description": "",
+        "includeAll": true,
+        "label": "log_level",
+        "name": "log_level",
+        "options": [
+          {
+            "selected": true,
+            "text": "ERROR",
+            "value": "ERROR"
+          },
+          {
+            "selected": false,
+            "text": "WARN",
+            "value": "WARN"
+          },
+          {
+            "selected": false,
+            "text": "INFO",
+            "value": "INFO"
+          },
+          {
+            "selected": false,
+            "text": "DEBUG",
+            "value": "DEBUG"
+          }
+        ],
+        "query": "ERROR,WARN,INFO,DEBUG",
+        "type": "custom"
       }
     ]
   },
@@ -193,5 +294,6 @@
   "timezone": "browser",
   "title": "CDP Service - Log Monitor",
   "uid": "adj6zlr",
-  "version": 5
+  "version": 1,
+  "weekStart": ""
 }
