@@ -54,7 +54,7 @@
           "refId": "A"
         }
       ],
-      "title": "CDP $log_level Logs",
+      "title": "CDP $log_level logs",
       "type": "logs"
     },
     {
@@ -292,8 +292,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "CDP Service - Log Monitor",
+  "title": "CDP - Log Monitor",
   "uid": "adj6zlr",
-  "version": 1,
+  "version": 4,
   "weekStart": ""
 }
